@@ -43,6 +43,10 @@ inputs:
     description: 'NodeJS required version (default: 16.x)'
     required: false
     default: '16.x'
+  skip-build:
+    description: 'Enable for deploy only'
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:  
@@ -60,13 +64,14 @@ runs:
       uses: actions/checkout@v3.2.0
 
     - name: Setup Nodejs
+      if: inputs.skip-build == 'false'
       id: setup-node
       uses: actions/setup-node@v3
       with:
         node-version: ${{ inputs.node-version }}
         
     - name: Setup yarn commands
-      if: inputs.build-command == 'yarn'
+      if: ${{ (inputs.build-command == 'yarn') && (inputs.skip-build == 'false') }}
       run: |
          echo "cache_files=$CACHE_FILES" >> $GITHUB_ENV
          echo "dependencies_cmd=yarn install --pure-lockfile" >> $GITHUB_ENV
@@ -76,7 +81,7 @@ runs:
       shell: bash
       
     - name: Setup npm commands
-      if: inputs.build-command == 'npm'
+      if: ${{ (inputs.build-command == 'npm') && (inputs.skip-build == 'false') }}
       run: |
         echo "cache_files=$CACHE_FILES" >> $GITHUB_ENV
         echo "dependencies_cmd=npm ci" >> $GITHUB_ENV
@@ -86,6 +91,7 @@ runs:
       shell: bash
         
     - name: Cache dependencies
+      if: inputs.skip-build == 'false'
       id: node-cache
       uses: actions/cache@v3.0.11
       with:
@@ -94,12 +100,13 @@ runs:
         key: dev-${{ runner.os }}-${{ env.cache_files }}
         
     - name: Install dependencies
-      if: steps.node-cache.outputs.cache-hit != 'true'
+      if: ${{ (steps.node-cache.outputs.cache-hit == 'false') && (inputs.skip-build == 'false') }}
       id: install-dependencies
       run: ${{ env.dependencies_cmd }}
       shell: bash
 
     - name: Set envs
+      if: inputs.skip-build == 'false'
       id: set-envs
       run: |
         echo "${{ inputs.build-envs }}" | while read line; do
@@ -115,6 +122,7 @@ runs:
       shell: bash
 
     - name: Build
+      if: inputs.skip-build == 'false'
       id: build
       run: ${{ env.build_cmd }}
       env:
