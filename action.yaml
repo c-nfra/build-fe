@@ -100,7 +100,7 @@ runs:
         key: dev-${{ runner.os }}-${{ env.cache_files }}
         
     - name: Install dependencies
-      if: ${{ (steps.node-cache.outputs.cache-hit == 'false') && (inputs.skip-build == 'false') }}
+      if: ${{ (steps.node-cache.outputs.cache-hit != 'true') && (inputs.skip-build == 'false') }}
       id: install-dependencies
       run: ${{ env.dependencies_cmd }}
       shell: bash
