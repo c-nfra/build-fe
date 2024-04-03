@@ -77,7 +77,7 @@ runs:
          echo "dependencies_cmd=yarn install --pure-lockfile" >> $GITHUB_ENV
          echo "build_cmd=yarn build" >> $GITHUB_ENV
       env: 
-        CACHE_FILES: ${{ hashFiles('**/yarn.lock') }}
+        CACHE_FILES: ${{ hashFiles('**/package-lock.json') }}
       shell: bash
       
     - name: Setup npm commands
