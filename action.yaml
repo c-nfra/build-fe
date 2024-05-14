@@ -117,6 +117,15 @@ runs:
           key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
           value=$(echo $line | cut -d '=' -f 2 | tr -d ' ')
 
+          for keyword in "API" "KEY" "SECRET" "TOKEN"; do
+            if [[ $key =~ $keyword ]]; then
+              if [[ $value != "***" ]]; then
+                echo "FOUND UNECRYPTED SECRET VARIABLE, ABORTING BUILD!";
+                exit 1;
+              fi
+            fi
+          done
+
           echo "$key=$value" >> $GITHUB_ENV
         done
       shell: bash
