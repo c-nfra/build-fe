@@ -120,7 +120,7 @@ runs:
           for keyword in "API" "KEY" "SECRET" "TOKEN"; do
             if [[ $key =~ $keyword ]]; then
               if [[ $value != "***" ]]; then
-                echo "FOUND UNECRYPTED SECRET VARIABLE, ABORTING BUILD!";
+                echo "============> FOUND UNECRYPTED SECRET VARIABLE, ABORTING BUILD!!! <============";
                 exit 1;
               fi
             fi
