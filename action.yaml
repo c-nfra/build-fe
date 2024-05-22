@@ -109,9 +109,7 @@ runs:
       if: inputs.skip-build == 'false'
       id: set-envs
       run: |
-        echo "${{ inputs.build-envs }}" | while read line; do
-          line=$(printf "'$line'\n")
-          
+        echo "${{ inputs.build-envs }}" | while read line; do      
           if [[ $line == "" ]]; then
             continue;
           fi
