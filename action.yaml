@@ -114,7 +114,6 @@ runs:
             continue;
           fi
 
-          line=$(echo $line | sed 's/&\\&/g')
           echo "Line is: $line"
 
           key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
