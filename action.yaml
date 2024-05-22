@@ -110,6 +110,8 @@ runs:
       id: set-envs
       run: |
         echo "${{ inputs.build-envs }}" | while read line; do
+          echo "Line is: $line"
+
           if [[ $line == "" ]]; then
             continue;
           fi
