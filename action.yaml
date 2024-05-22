@@ -114,10 +114,11 @@ runs:
             continue;
           fi
 
-          line=$(echo $line | sed 's/?&=/\\&/g')
+          line=$(echo $line | sed 's/&\\&/g')
+          echo "Line is: $line"
 
           key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
-          value=$(echo $line | cut -d '=' -f 2 | tr -d ' ')
+          value=$(echo $line | cut -d '=' -f 2- | tr -d ' ')
 
           echo "$key=$value" >> $GITHUB_ENV
         done
