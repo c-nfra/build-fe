@@ -117,7 +117,7 @@ runs:
           fi
 
           key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
-          value=$(echo $line | cut -d '=' -f 2- | tr -d ' ')
+          value=$(echo $line | cut -d '=' -f 2 | tr -d ' ')
 
           echo "$key=$value" >> $GITHUB_ENV
         done
