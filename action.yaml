@@ -116,8 +116,11 @@ runs:
             continue;
           fi
 
-          key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
-          value=$(echo $line | cut -d '=' -f 2- | tr -d ' ')
+#          key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
+#          value=$(echo $line | cut -d '=' -f 2- | tr -d ' ')
+
+          key=$(echo $line | cut -d '=' -f 1)
+          value=$(echo $line | cut -d '=' -f 2-)
 
           echo "$key=$value" >> $GITHUB_ENV
         done
