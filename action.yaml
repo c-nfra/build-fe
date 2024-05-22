@@ -114,13 +114,10 @@ runs:
             continue;
           fi
 
-          echo "Line is: $line"
-
           key=$(echo $line | cut -d '=' -f 1 | tr -d ' ')
           value=$(echo $line | cut -d '=' -f 2- | tr -d ' ')
-          value=$(echo "'$value'")
 
-          echo "$key=$value" >> $GITHUB_ENV
+          printf "$key='$value'\n" >> $GITHUB_ENV
         done
       shell: bash
 
