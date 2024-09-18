@@ -28,7 +28,7 @@ inputs:
     required: false
     default: ''
   build-command:
-    description: 'Command used to build the application [ yarn | npm ] (default: yarn)'
+    description: 'Command used to build the application [ yarn | npm | bun ] (default: yarn)'
     required: false
     default: 'yarn'
   build-envs:
@@ -64,11 +64,16 @@ runs:
       uses: actions/checkout@v4
 
     - name: Setup Nodejs
-      if: inputs.skip-build == 'false'
+      if: ${{ (inputs.build-command != 'bun') && (inputs.skip-build == 'false') }}
       id: setup-node
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node-version }}
+
+    - name: Setup Bun.sh
+      if: ${{ (inputs.build-command == 'bun') && (inputs.skip-build == 'false') }}
+      id: setup-bun
+      uses: oven-sh/setup-bun@v2
         
     - name: Setup yarn commands
       if: ${{ (inputs.build-command == 'yarn') && (inputs.skip-build == 'false') }}
@@ -89,7 +94,17 @@ runs:
       env: 
         CACHE_FILES: ${{ hashFiles('**/package-lock.json') }}
       shell: bash
-        
+
+    - name: Setup bun commands
+      if: ${{ (inputs.build-command == 'bun') && (inputs.skip-build == 'false') }}
+      run: |
+        echo "cache_files=$CACHE_FILES" >> $GITHUB_ENV
+        echo "dependencies_cmd=bun install" >> $GITHUB_ENV
+        echo "build_cmd=bun run build" >> $GITHUB_ENV
+      env: 
+        CACHE_FILES: ${{ hashFiles('**/package-lock.json') }}
+      shell: bash
+
     - name: Cache dependencies
       if: inputs.skip-build == 'false'
       id: node-cache
@@ -100,7 +115,7 @@ runs:
         key: dev-${{ runner.os }}-${{ env.cache_files }}
         
     - name: Install dependencies
-      if: ${{ (steps.node-cache.outputs.cache-hit != 'true') && (inputs.skip-build == 'false') }}
+      if: ${{ (steps.node-cache.outputs.cache-hit != 'true' || inputs.build-command == 'bun') && (inputs.skip-build == 'false') }}
       id: install-dependencies
       run: ${{ env.dependencies_cmd }}
       shell: bash
