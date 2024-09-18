@@ -103,7 +103,7 @@ runs:
       shell: bash
 
     - name: Cache dependencies
-      if: inputs.skip-build == 'false'
+      if: ${{ (inputs.build-command != 'bun') && (inputs.skip-build == 'false') }}
       id: node-cache
       uses: actions/cache@v4
       with:
