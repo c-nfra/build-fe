@@ -98,11 +98,8 @@ runs:
     - name: Setup bun commands
       if: ${{ (inputs.build-command == 'bun') && (inputs.skip-build == 'false') }}
       run: |
-        echo "cache_files=$CACHE_FILES" >> $GITHUB_ENV
         echo "dependencies_cmd=bun install" >> $GITHUB_ENV
         echo "build_cmd=bun run build" >> $GITHUB_ENV
-      env: 
-        CACHE_FILES: ${{ hashFiles('**/package-lock.json') }}
       shell: bash
 
     - name: Cache dependencies
