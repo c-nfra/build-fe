@@ -42,7 +42,7 @@ inputs:
   node-version:
     description: 'NodeJS required version (default: 16.x)'
     required: false
-    default: '16.x'
+    default: '20.x'
   skip-build:
     description: 'Enable for deploy only'
     required: false
