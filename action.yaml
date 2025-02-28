@@ -89,7 +89,7 @@ runs:
       if: ${{ (inputs.build-command == 'npm') && (inputs.skip-build == 'false') }}
       run: |
         echo "cache_files=$CACHE_FILES" >> $GITHUB_ENV
-        echo "dependencies_cmd=npm ci" >> $GITHUB_ENV
+        echo "dependencies_cmd=npm ci --force" >> $GITHUB_ENV
         echo "build_cmd=npm run build" >> $GITHUB_ENV
       env: 
         CACHE_FILES: ${{ hashFiles('**/package-lock.json') }}
