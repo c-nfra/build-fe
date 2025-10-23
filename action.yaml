@@ -44,7 +44,7 @@ inputs:
     required: false
     default: '20.x'
   skip-build:
-    description: 'Enable for deploy only'
+    description: 'Enable for deploy only. Needs build-path to point to files'
     required: false
     default: false
 runs:
