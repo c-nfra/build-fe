@@ -17,8 +17,8 @@ inputs:
     description: 'Name of the AWS S3 bucket'
     required: true
   aws-cloudfront-name:
-    description: 'Name of the AWS S3 bucket'
-    required: true
+    description: 'Altername domain name of the distribution'
+    required: false
   slack-channel:
     description: 'Name of the Slack channel used for CI alerts'
     required: false
@@ -154,6 +154,7 @@ runs:
       shell: bash
 
     - name: Invalidate CloudFront cache
+      if: inputs.aws-cloudfront-name != ''
       id: invalidate-cache
       run: |
         #!/usr/bin/env bash
